@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>koa2 - Jelly&#39;s Blogs</title>
+    <title>Koa2 - Jelly&#39;s Blogs</title>
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="google" content="notranslate" />
@@ -40,7 +40,7 @@
     <div class="bar" style="width: 0;"></div>
     <a class="icon-home image-icon" href="javascript:;" data-url="http://yoursite.com"></a>
     <div title="播放/暂停" class="icon-play"></div>
-    <h3 class="subtitle">koa2</h3>
+    <h3 class="subtitle">Koa2</h3>
     <div class="social">
         <!--<div class="like-icon">-->
             <!--<a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
@@ -58,12 +58,10 @@
     <div class="section">
         <div class="article">
     <div class='main'>
-        <h1 class="title">koa2</h1>
+        <h1 class="title">Koa2</h1>
         <div class="stuff">
             <span>四月 14, 2018</span>
             
-  <ul class="post-tags-list" itemprop="keywords"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/koa2-node-server/" rel="tag">koa2,node,server</a></li></ul>
-
 
         </div>
         <div class="content markdown">
@@ -72,7 +70,7 @@
 <ol>
 <li>master</li>
 <li>http_response_type</li>
-<li>middleware </li>
+<li>middleware</li>
 <li>router</li>
 <li>cookie</li>
 <li>upload_file</li>
@@ -82,12 +80,13 @@
 <p>you can study knowledge above step by step.</p>
 <hr>
 <h2 id="Coding"><a href="#Coding" class="headerlink" title="Coding"></a>Coding</h2><blockquote>
-<p><a href="https://github.com/koajs/koa/blob/master/docs/error-handling.md" target="_blank" rel="noopener">Error Handling</a> </p>
+<p><a href="https://github.com/koajs/koa/blob/master/docs/error-handling.md" target="_blank" rel="noopener">Error Handling</a></p>
 </blockquote>
 <p>In koa2 we use async/await to handle callback instead of co&amp;generator. When error happened, we need to know and deal it.</p>
 <p>Koa has its default error handler to resolve error when we dont provide us error handler.</p>
 <p><code>The default error handler is essentially a try-catch at the very beggining of the middleware chain. It will use a status code of</code> err.status <code>, or by default 500. If</code> err.expose <code>is true, then</code> err.message <code>will be the reply. Otherwise, a message generated from the error code will be used(e.g.for the code 500 the message &quot;Internal Server Error&quot; will be used ). Finally, throw err and let global error listener capture and do something.</code></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// default error handler</span></span><br><span class="line">app.use(<span class="keyword">async</span> (ctx, next) =&gt; &#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">await</span> next();</span><br><span class="line">  &#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">    err.status = err.statusCode || err.status || <span class="number">500</span>;</span><br><span class="line">    <span class="keyword">throw</span> err; <span class="comment">// throw err</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// default error handler</span></span><br><span class="line">app.use(<span class="keyword">async</span> (ctx, next) =&gt; &#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">await</span> next();</span><br><span class="line">  &#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">    err.status = err.statusCode || err.status || <span class="number">500</span>;</span><br><span class="line">    <span class="keyword">throw</span> err; <span class="comment">// throw err</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
 <blockquote>
 <p>The Error Event<br>Error event listeners can be specified with <code>app.on(&#39;error&#39;)</code>. If no error listener is specified, a default error listener is used.<br><code>Error listener receive all errors that make their way back through the middleware chain</code>, if an error is caught and not thrown again, it will not be passed to the error listener(<code>this means if you catch error and deal it, then you dont throw it, so the error listerner neither global one you provide nor default one is cant receive the error event.</code>). If no error event listener is specified, then <code>app.onerror(default error listener)</code> will be used which simply log the error if <code>error expose</code> is true and <code>app silent</code> is false.</p>
 </blockquote>

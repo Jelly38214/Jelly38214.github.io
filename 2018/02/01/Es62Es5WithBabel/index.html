@@ -1,0 +1,230 @@
+
+<!DOCTYPE html>
+<html lang="EN" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Es62Es5WithBabel - Jelly&#39;s Blogs</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Jelly38214,"> 
+    <meta name="description" content="An Front End have GF ^_^,How ES6 features convert into ES5 by Babel.
+spread/rest object({…{}})
+
+123456789101112var _extend =,"> 
+    <meta name="author" content="Jelly"> 
+    <link rel="alternative" href="atom.xml" title="Jelly&#39;s Blogs" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-8691406134231910",
+              enable_page_level_ads: true
+         });
+    </script>
+    <script async custom-element="amp-auto-ads"
+        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+    </script>
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">Jelly&#39;s Blogs</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="icon-home image-icon" href="javascript:;" data-url="http://yoursite.com"></a>
+    <div title="播放/暂停" class="icon-play"></div>
+    <h3 class="subtitle">Es62Es5WithBabel</h3>
+    <div class="social">
+        <!--<div class="like-icon">-->
+            <!--<a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+        <!--</div>-->
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">Es62Es5WithBabel</h1>
+        <div class="stuff">
+            <span>二月 01, 2018</span>
+            
+  <ul class="post-tags-list" itemprop="keywords"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/ES6-babel/" rel="tag">ES6;babel</a></li></ul>
+
+
+        </div>
+        <div class="content markdown">
+            <h2 id="How-ES6-features-convert-into-ES5-by-Babel"><a href="#How-ES6-features-convert-into-ES5-by-Babel" class="headerlink" title="How ES6 features convert into ES5 by Babel."></a>How ES6 features convert into ES5 by <a href="https://babeljs.cn/repl/" target="_blank" rel="noopener">Babel</a>.</h2><blockquote>
+<p>spread/rest object({…{}})</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> _extend = <span class="built_in">Object</span>.assign ||</span><br><span class="line">  <span class="function"><span class="keyword">function</span>(<span class="params">target</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">1</span>;i &lt; <span class="built_in">arguments</span>.length; i++) &#123;</span><br><span class="line">      <span class="keyword">var</span> source = <span class="built_in">arguments</span>[i]</span><br><span class="line">      <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> source) &#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">Object</span>.prototype.hasOwnProperty.call(source, key)) &#123;</span><br><span class="line">          target[key] = source[key]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> target</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>//Caution: Why use <code>Object.prototype.hasOwnProperty.call(source, key)</code> instead of <code>source.hasOwnProperty(key)</code></p>
+<p>Because Javascript does not protect the property name <code>hasOwnProperty</code>; thus , if the possiility exists that an object might have a property with this name, it is nessary to use an <code>external</code> <code>hasOwnProperty</code> to get correct results.</p>
+<p>Let’s see some example</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> foo = &#123;</span><br><span class="line">  hasOwnProperty: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">  &#125;,</span><br><span class="line">  bar: <span class="string">'Here be dragons'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">foo.hasOwnProperty(<span class="string">'bar'</span>) <span class="comment">// always returns false</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Use another Object's hasOwnProperty</span></span><br><span class="line"><span class="comment">// and call it with `this` set to foo</span></span><br><span class="line">(&#123;&#125;).hasOwnProperty.call(foo, <span class="string">'bar'</span>)  <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// It's also possible to use the hasOwnProperty property</span></span><br><span class="line"><span class="comment">// from the Object prototype for this purpose</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.prototype.hasOwnProperty.call(foo, <span class="string">'bar'</span>) <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>what is difference between commonjs module &amp; es module</p>
+</blockquote>
+<p><code>模块化规范：即为JavaScript提供一种模块编写，模块依赖和模块运行的方案</code></p>
+<p><code>AMD, CMD 运行时异步加载模块， webpack构建时模块合并分块</code></p>
+<p><code>babel将还未被宿主环境直接支持的ES6 module编译为commonjs</code></p>
+<p>ES6模块的设计思想是尽量的<code>静态化</code>，使得编译时就能确定模块的依赖关系，以及输入和输出的<code>变量</code>,</p>
+<p>CommonJS模块就是对象，输入时必须查找对象属性。<code>ES6模块不是对象，而是通过export命令显式指定输出的代码，再通过import命令输入</code>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// a.js</span></span><br><span class="line"><span class="keyword">var</span> a = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">export</span> a;</span><br><span class="line"></span><br><span class="line"><span class="comment">// b.js</span></span><br><span class="line"><span class="keyword">import</span> a <span class="keyword">from</span> <span class="string">'./a'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// =&gt; 上面的代码会报错, export 命令显式指定输出的代码，然后import再引入这代码</span></span><br><span class="line"><span class="comment">// 也就说，b.js文件就变成了这样</span></span><br><span class="line"><span class="keyword">export</span> a;</span><br><span class="line"><span class="keyword">import</span> a <span class="keyword">from</span> <span class="string">'./a'</span> <span class="comment">// 可以看babel编译后的源码</span></span><br><span class="line"></span><br><span class="line">而在模块里面，默认强制使用严格模式，因此不允许出现变量不声明就使用，所以不能这样写</span><br><span class="line"><span class="keyword">var</span> a = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">export</span> a;</span><br><span class="line"></span><br><span class="line">而是要这样写</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">var</span> a = <span class="number">1</span>;</span><br><span class="line">or</span><br><span class="line"><span class="keyword">var</span> a = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">export</span> &#123;a&#125;<span class="string">'</span></span><br></pre></td></tr></table></figure>
+
+
+<ul>
+<li>import is hoisted</li>
+<li>es module is imported by a specify path in AST. commonjs in runtime to know where module is .</li>
+<li>es module will export object reference. comonjs export the copy of object;</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// imports are hoisted</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// a.js</span></span><br><span class="line">global.log = <span class="function"><span class="params">str</span> =&gt;</span> <span class="built_in">console</span>.log(str);</span><br><span class="line"><span class="keyword">import</span> <span class="string">'./b'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// b.js</span></span><br><span class="line">global.log(<span class="string">'hello world'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// =&gt; global.log is undefined;</span></span><br></pre></td></tr></table></figure>
+
+<p>the actual code transformed by babel</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// a.js</span></span><br><span class="line"><span class="meta">'use strict'</span></span><br><span class="line"><span class="built_in">require</span>(<span class="string">'./b'</span>);</span><br><span class="line">globl.log = <span class="function"><span class="keyword">function</span>(<span class="params">str</span>) </span>&#123;<span class="built_in">console</span>.log(str)&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// b.js</span></span><br><span class="line"><span class="string">`use strict`</span></span><br><span class="line">global.log(<span class="string">'hello world'</span>);</span><br></pre></td></tr></table></figure>
+
+<p>严格模块主要有一下限制</p>
+<ol>
+<li>变量必须声明后再使用</li>
+<li>函数的参数不能有同名属性，否则报错</li>
+<li>不能使用with语句</li>
+<li>不能对只读属性赋值，否则报错</li>
+<li>不能使用前缀 <code>0</code>表示八进制数， 否则报错</li>
+<li>不能删除不可删除的属性， 否则报错</li>
+<li>不能删除变量 <code>delete prop</code>，会报错，只能删除属性 <code>delete global[prop]</code></li>
+<li><code>eval</code>不会在它的外层作用域引入变量</li>
+<li><code>eval</code>和<code>arguments</code>不能被重新赋值</li>
+<li><code>arguments</code>不会自动反映函数参数的变化</li>
+<li>不能使用<code>arguments.callee</code></li>
+<li>不能使用<code>arguments.caller</code></li>
+<li>禁止this指向全局对象</li>
+<li>不能使用<code>fn.caller</code>和<code>fn.arguments</code>获取函数调用的堆栈</li>
+<li>增加了保留字（比如 <code>protected</code>，<code>static</code> 和<code>interface</code>）</li>
+</ol>
+<p>尤其注意，<code>this</code>的限制。ES6模块中，顶层的<code>this</code>指向<code>undefined</code>，即不应该在顶层代码使用<code>this</code></p>
+<p><code>ES6模块，export命令规定的是对外的接口，必须与模块内部的变量建立一一对应的关系</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="number">1</span>;</span><br><span class="line"><span class="keyword">var</span> m = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">export</span> m;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 上述代码都会报错，因为没输出接口</span></span><br></pre></td></tr></table></figure>
+
+<p>ES6 export 语句输出的接口，与其对应的值时<code>动态</code>绑定关系</p>
+<p>import 语句会执行所加载的模块，因此可以有下面的写法</p>
+<p><code>import &quot;lodash&quot;</code></p>
+<h3 id="CommonJS-模块的加载原理"><a href="#CommonJS-模块的加载原理" class="headerlink" title="CommonJS 模块的加载原理"></a>CommonJS 模块的加载原理</h3><p><code>require</code>命令第一次加载commonjs模块，就会执行整个模块，然后在内存生成一个对象</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  id: <span class="string">'模块的名称'</span>,</span><br><span class="line">  exports: &#123;...&#125; <span class="comment">// 输出的对象</span></span><br><span class="line">  loaded: <span class="literal">true</span> <span class="comment">//布尔值表示是否执行完毕</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以后需要用到这个模块时，就会到这个内存对象的<code>exports</code>上取值。</p>
+<p>即使再次执行require命令，也不会再执行这个模块，而是到缓存之中取值。 也就是说，CommonJS模块无论加载多少次，都只会在<code>第一次加载时运行一次</code>,就返回第一次运行的结果。除非手动清除系统缓存。</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/5146554.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/qq/001faIUs4M2zna.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+</html>

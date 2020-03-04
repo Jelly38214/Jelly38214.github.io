@@ -1,0 +1,211 @@
+
+<!DOCTYPE html>
+<html lang="EN" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>node_analysis - Jelly&#39;s Blogs</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Jelly38214,"> 
+    <meta name="description" content="An Front End have GF ^_^,This article is to discuss some operation mechanism inside node.js.
+
+how require function work
+
+let,"> 
+    <meta name="author" content="Jelly"> 
+    <link rel="alternative" href="atom.xml" title="Jelly&#39;s Blogs" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-8691406134231910",
+              enable_page_level_ads: true
+         });
+    </script>
+    <script async custom-element="amp-auto-ads"
+        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+    </script>
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">Jelly&#39;s Blogs</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="icon-home image-icon" href="javascript:;" data-url="http://yoursite.com"></a>
+    <div title="播放/暂停" class="icon-play"></div>
+    <h3 class="subtitle">node_analysis</h3>
+    <div class="social">
+        <!--<div class="like-icon">-->
+            <!--<a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+        <!--</div>-->
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">node_analysis</h1>
+        <div class="stuff">
+            <span>四月 22, 2018</span>
+            
+  <ul class="post-tags-list" itemprop="keywords"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/node-mechanism/" rel="tag">node;mechanism;</a></li></ul>
+
+
+        </div>
+        <div class="content markdown">
+            <p>This article is to discuss some operation mechanism inside node.js.</p>
+<blockquote>
+<p>how <code>require function</code> work</p>
+</blockquote>
+<p>let’s know two concepts</p>
+<ul>
+<li><code>module wrap function</code> =&gt; decorate your module and let the module could be exported and required.</li>
+<li><code>vm</code> module =&gt; compile string to javascript statement that V8 can execute.</li>
+</ul>
+<p>let see what <code>module wrap function</code> looks like.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">;(<span class="function"><span class="keyword">function</span>(<span class="params">_module</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// your module code</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>that’s it, so brief ,right?</p>
+<p>Then let’s implement us require function for making mechanism of real require function in node.</p>
+<p>we call our require function <code>_require</code>,and module object we call <code>_module</code>; The let’s code.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* first, we write our functional code. A Add function</span></span><br><span class="line"><span class="comment">* add.js</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">add</span>(<span class="params">a,b</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">_module.exports = add; <span class="comment">// caution: we use _module instead of node's module object.</span></span><br></pre></td></tr></table></figure>
+
+<p>Now, implement module wrap function &amp; _module</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// moduleWrapFn.js</span></span><br><span class="line"><span class="keyword">const</span> wrap = <span class="function"><span class="params">source</span> =&gt;</span> <span class="string">`</span></span><br><span class="line"><span class="string">  ;(function(_module) &#123;</span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;source&#125;</span> \n</span></span><br><span class="line"><span class="string">    return _module;</span></span><br><span class="line"><span class="string">  &#125;)</span></span><br><span class="line"><span class="string">`</span>;</span><br><span class="line"><span class="built_in">module</span>.exports = wrap;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// _module.js</span></span><br><span class="line"><span class="keyword">const</span> vm = <span class="built_in">require</span>(<span class="string">'vm'</span>); <span class="comment">// one module of node, it can transfer string into real javascript code that v8 can recognize and execute.</span></span><br><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>); <span class="comment">// read the file.</span></span><br><span class="line"><span class="keyword">const</span> moduleWrapFn = <span class="built_in">require</span>(<span class="string">'moduleWrapFn'</span>); <span class="comment">// our moudleWrapFn.js</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">_Module</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.exports = &#123;&#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">_Module.prototype._compile = <span class="function"><span class="keyword">function</span>(<span class="params">filePath</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> source = fs.readFileSync(filePath,<span class="string">'utf-8'</span>); <span class="comment">// that's why require is a synchronouse function.</span></span><br><span class="line">  <span class="keyword">const</span> fn = vm.runInThisContext(moduleWrapFn(source)); <span class="comment">// this fn is exported _module exactly .</span></span><br><span class="line">  <span class="keyword">return</span> fn;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> newModule = <span class="keyword">new</span> _Module();</span><br><span class="line"><span class="built_in">module</span>.exports = newModule <span class="comment">// return real _module object.</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// _require.js</span></span><br><span class="line"><span class="keyword">const</span> _module = <span class="built_in">require</span>(<span class="string">'_module'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span>(<span class="params">filePath</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> fn = _module._compile(filePath);</span><br><span class="line">  <span class="keyword">return</span> fn(_module).exports; <span class="comment">// export what hang on the _module.exports.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>All functional module we have done. Let’s test.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// main.js</span></span><br><span class="line"><span class="keyword">const</span> _require = <span class="built_in">require</span>(<span class="string">'_require'</span>);</span><br><span class="line"><span class="keyword">const</span> add = _require(<span class="string">'add'</span>); <span class="comment">// caution: We use our _require instead of require to import add module.</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'5+6 ='</span>,add(<span class="number">5</span>,<span class="number">6</span>)); <span class="comment">// =&gt; 5+6 = 11</span></span><br></pre></td></tr></table></figure>
+<p>the result =&gt;<br><img src="http://p150tzuds.bkt.clouddn.com/image/node/node_require.png" alt=""></p>
+<h1 id="build-a-https-server-in-local"><a href="#build-a-https-server-in-local" class="headerlink" title="build a https server in local"></a>build a https server in local</h1><p>https need cerfiticate. in this case I use self-signed to generate a cerifiicate.(ps: ubuntu 16.04 LTS)</p>
+<p>first need a private key, then use key to create a sign file, finally use above two file to generate the certificate file. type these codes in terminal.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">openssl genrsa <span class="number">1024</span> &gt; ~<span class="regexp">/project/</span>httpsnode/private.pem</span><br><span class="line"></span><br><span class="line">openssl req -<span class="keyword">new</span> -key ~<span class="regexp">/project/</span>httpsnode/private.pem -out csr.pem</span><br><span class="line"></span><br><span class="line">openssl x509 -req -days <span class="number">365</span> -<span class="keyword">in</span> csr.pem -signkey ~<span class="regexp">/project/</span>httpsnode/private.pem -out ~<span class="regexp">/project/</span>httpsnode/file.crt</span><br></pre></td></tr></table></figure>
+
+<p>then creating the server in app.js</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</span><br><span class="line"><span class="keyword">var</span> app = express();</span><br><span class="line"><span class="keyword">var</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"><span class="keyword">var</span> https = <span class="built_in">require</span>(<span class="string">'https'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> privateKey = fs.readFileSync(path.join(__dirname,<span class="string">'./private.pem'</span>),<span class="string">'utf8'</span>);</span><br><span class="line"><span class="keyword">var</span> certificate = fs.readFileSync(path.join(__dirname,<span class="string">'./file.crt'</span>),<span class="string">'utf8'</span>);</span><br><span class="line"><span class="keyword">var</span> credentials = &#123;<span class="attr">key</span>: privateKey, <span class="attr">cert</span>:certificate&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> httpServer = http.createServer(app);</span><br><span class="line"><span class="keyword">var</span> httpsServer = https.createServer(credentials,app);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> PORT = <span class="number">8000</span>;</span><br><span class="line"><span class="keyword">var</span> SSLPORT = <span class="number">8001</span>;</span><br><span class="line"></span><br><span class="line">httpServer.listen(PORT, () =&gt; &#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">'HTTP Server is running on: http://localhost:%s'</span>,PORT);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">httpsServer.listen(SSLPORT, () =&gt; &#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">'HTTPS Server is running on: http://localhost:%s'</span>,SSLPORT);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.get(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">	req.protocol === <span class="string">'https'</span> ? res.status(<span class="number">200</span>).send(<span class="string">'This is https visit'</span>) : res.status(<span class="number">200</span>).send(<span class="string">'This is http visit'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>references:</p>
+<ul>
+<li><a href="https://nodejs.org/api/https.html" target="_blank" rel="noopener">document</a></li>
+<li><a href="https://blog.csdn.net/chenyufeng1991/article/details/60340006" target="_blank" rel="noopener">https with express</a></li>
+<li><a href="https://blog.csdn.net/liuniansilence/article/details/78668578" target="_blank" rel="noopener">https details</a></li>
+</ul>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/5146554.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/qq/001faIUs4M2zna.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+</html>

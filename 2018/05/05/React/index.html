@@ -1,0 +1,245 @@
+
+<!DOCTYPE html>
+<html lang="EN" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>React - Jelly&#39;s Blogs</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Jelly38214,"> 
+    <meta name="description" content="An Front End have GF ^_^,
+what different between Reactv15 and Reactv16
+
+Since v16, React use Fiber structure to update React,"> 
+    <meta name="author" content="Jelly"> 
+    <link rel="alternative" href="atom.xml" title="Jelly&#39;s Blogs" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-8691406134231910",
+              enable_page_level_ads: true
+         });
+    </script>
+    <script async custom-element="amp-auto-ads"
+        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+    </script>
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">Jelly&#39;s Blogs</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="icon-home image-icon" href="javascript:;" data-url="http://yoursite.com"></a>
+    <div title="播放/暂停" class="icon-play"></div>
+    <h3 class="subtitle">React</h3>
+    <div class="social">
+        <!--<div class="like-icon">-->
+            <!--<a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+        <!--</div>-->
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">React</h1>
+        <div class="stuff">
+            <span>五月 05, 2018</span>
+            
+  <ul class="post-tags-list" itemprop="keywords"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/React/" rel="tag">React</a></li></ul>
+
+
+        </div>
+        <div class="content markdown">
+            <blockquote>
+<p>what different between Reactv15 and Reactv16</p>
+</blockquote>
+<p>Since v16, React use Fiber structure to update React componet, that process is asynchronous instead of synchronous in v15.</p>
+<p>Update process in Fiber has two phrase</p>
+<ol>
+<li>reconciliation phrase </li>
+<li>commit phrase </li>
+</ol>
+<p>In reconciliation phrase, React find DOM needed to be updated. This phrase cant be interrupted if React found there are some more priority task needed to be executed.</p>
+<p>In commit phrase, React update the DOM and wouldn’t be interrupted.</p>
+<p>In reconciliation phrase, these component recycle will be called, so they are be affected. Ther will be called several times properly.</p>
+<ul>
+<li>componentWillMount (caution: avoid execute login much times and you just want to execute one time)</li>
+<li>componentWillUpdate (caution)</li>
+<li>componentWillReceiveProps (called when parent component props update. no big matter)</li>
+<li>shouldComponentUpdate (just return true or false. no big matter)</li>
+</ul>
+<p>In commit phrase</p>
+<ul>
+<li>componentDidMount</li>
+<li>componentDidUpdate</li>
+<li>componentWillUnmount</li>
+</ul>
+<hr>
+<blockquote>
+<p>setState Api feature</p>
+</blockquote>
+<p>For React, <code>UI = f(state)</code>, function <code>f</code> is React and the code we wrote.</p>
+<p>There are some features about <code>setState</code></p>
+<ol>
+<li>setState wouldn’t change value of state in React Component <code>immediately</code>.</li>
+<li>setState make component to update for rerendering UI(shouldComponentUpdate =&gt; componentWillUpdate =&gt; render =&gt; componentDidUpdate)</li>
+<li>React will merge setState when it called <code>serveral times</code> in one queue or one loop.</li>
+</ol>
+<p>You can change this.state’s value because this.state just a object. But that’s no any means, in this condition React wont rerender UI.</p>
+<p>Only one way you can use to change this.state and make React to rerender is to use setState function.</p>
+<p>setState wouldn’t change this.state instanlly,So, when React change this.state’s value. The answer is in <code>render</code>.</p>
+<p>Let’s which happended after calling setState. four hook called.</p>
+<ol>
+<li>shouldComponentUpdate =&gt; <code>return true ? no update : update</code>(this function return false will stop executeting the follow function, But React will change this.state’s value. This condition is so special )</li>
+<li>componentWillUpdate =&gt; no update</li>
+<li>render =&gt; update</li>
+<li>componentDidUpdate =&gt; updated</li>
+</ol>
+<p>In order to keep false and not waste performance, React will merge setState.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">updateName</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.setState(&#123;<span class="attr">FirstName</span>: <span class="string">'Morgan'</span>&#125;)</span><br><span class="line">    <span class="keyword">this</span>.setState(&#123;<span class="attr">LastName</span>: <span class="string">'cheng'</span>&#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// equal to</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">updateName</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.setState(&#123;<span class="attr">FirstName</span>:<span class="string">'Morgan'</span>,<span class="attr">LastName</span>:<span class="string">'cheng'</span>&#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="string">`</span></span><br></pre></td></tr></table></figure>
+
+<p><code>function usage of setState</code>: setState not only take a object as parameter but also a function.</p>
+<p>This function will receive two params: <code>state and props</code>(caution: <code>state</code> params is not <code>this.state</code>, state has the same value of this.state. but they are not the same object.)</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">increment</span>(<span class="params">state,props</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;<span class="attr">count</span>:state.count + <span class="number">1</span>&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//example</span></span><br><span class="line"><span class="keyword">constructor</span>() &#123;</span><br><span class="line">  <span class="keyword">super</span>();</span><br><span class="line">  <span class="keyword">this</span>.state =  &#123;</span><br><span class="line">    count: <span class="number">0</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">incrementMultiple</span>(<span class="params">state, props</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.setState(increment) <span class="comment">// =&gt; state.count = 1 this.state.count = 0</span></span><br><span class="line">  <span class="keyword">this</span>.setState(increment) <span class="comment">// =&gt; state.count = 2 this.state.count = 0</span></span><br><span class="line">  <span class="keyword">this</span>.setState(increment) <span class="comment">// =&gt; state.count = 3 this.state.count = 0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<blockquote>
+<p>React PropTypes is separated and form a <code>prop-types</code> module since Reactv15.5.0</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// before v15.5.0</span></span><br><span class="line"><span class="keyword">import</span> React, &#123;Component&#125; <span class="keyword">from</span> <span class="string">'react'</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Comment</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="comment">//</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Comment.propTypes = &#123;</span><br><span class="line">  user: React.PropTypes.string</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// since v15.5.0</span></span><br><span class="line"><span class="keyword">import</span> PropTypes <span class="keyword">from</span> <span class="string">'prop-types'</span> <span class="comment">// need to install 'prop-types' and then import it.</span></span><br><span class="line">Comment.propTypes = &#123;</span><br><span class="line">  user: PropTypes.string</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>Babel Plugin transform-react-remove-prop-types</code> cant remove <code>prop-types</code> module in production model to reduce size of final package.</p>
+<hr>
+<ol>
+<li>Why you should not use index as key props in traversal.</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">  <span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span></span>&#123;</span><br><span class="line">	<span class="keyword">constructor</span>(props) &#123;</span><br><span class="line">		<span class="keyword">super</span>(props)</span><br><span class="line">		<span class="keyword">this</span>.state = &#123;</span><br><span class="line">			list: [&#123;<span class="attr">id</span>: <span class="number">1</span>,<span class="attr">val</span>: <span class="string">'aa'</span>&#125;, &#123;<span class="attr">id</span>: <span class="number">2</span>, <span class="attr">val</span>: <span class="string">'bb'</span>&#125;, &#123;<span class="attr">id</span>: <span class="number">3</span>, <span class="attr">val</span>: <span class="string">'cc'</span>&#125;,&#123;<span class="attr">id</span>:<span class="number">4</span>,<span class="attr">val</span>:<span class="string">'dd'</span>&#125;]</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	click() &#123;</span><br><span class="line">		<span class="keyword">this</span>.state.list.reverse()</span><br><span class="line">		<span class="keyword">this</span>.setState(&#123;&#125;)</span><br><span class="line">	&#125;</span><br><span class="line">	splice() &#123;</span><br><span class="line">		<span class="keyword">this</span>.state.list.splice(<span class="number">1</span>,<span class="number">1</span>)</span><br><span class="line">		<span class="keyword">this</span>.setState(&#123;&#125;)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	render() &#123;</span><br><span class="line">		<span class="keyword">return</span> (</span><br><span class="line">            &lt;ul&gt;</span><br><span class="line">                &lt;div onClick=&#123;<span class="keyword">this</span>.splice.bind(<span class="keyword">this</span>)&#125;&gt;<span class="keyword">delete</span>&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">                &lt;div onClick=&#123;this.click.bind(this)&#125;&gt;reverse&lt;/</span>div&gt;</span><br><span class="line">                &#123;</span><br><span class="line">                	<span class="keyword">this</span>.state.list.map(<span class="function"><span class="keyword">function</span>(<span class="params">item, index</span>) </span>&#123;</span><br><span class="line">                		<span class="keyword">return</span> (</span><br><span class="line">                            &lt;Li key=&#123;index&#125; val=&#123;item.val&#125;&gt;&lt;<span class="regexp">/Li&gt;</span></span><br><span class="line"><span class="regexp">                		)</span></span><br><span class="line"><span class="regexp">                	&#125;.bind(this))</span></span><br><span class="line"><span class="regexp">                &#125;</span></span><br><span class="line"><span class="regexp">            &lt;/u</span>l&gt;</span><br><span class="line">		)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Li</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span></span>&#123;</span><br><span class="line">	<span class="keyword">constructor</span>(props) &#123;</span><br><span class="line">		<span class="keyword">super</span>(props)</span><br><span class="line">	&#125;</span><br><span class="line">	componentDidMount() &#123;</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="string">'===mount==='</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	componentWillUpdate(nextProps, nextState) &#123;</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="string">'===update===='</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	render() &#123;</span><br><span class="line">		<span class="keyword">return</span> (</span><br><span class="line">            &lt;li&gt;</span><br><span class="line">                &#123;<span class="keyword">this</span>.props.val&#125;</span><br><span class="line">                &lt;input type=<span class="string">"text"</span>&gt;&lt;<span class="regexp">/input&gt;</span></span><br><span class="line"><span class="regexp">            &lt;/</span>li&gt;</span><br><span class="line">		)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>you click reverse and you’ll find that’s noly text change , the input with number dont change their position. That’s so weird.<br>But if you use id instead of index as key props, everything is ok.</p>
+<p>According to the element diff of React diff algorithm, if a element with a key props in the old vdom tree(mountedIndex), is bigger than lastIndex(initial zero), that’s say, only <code>mountedIndex &lt; lastIndex === true</code>, React will change this element’s postion. then React will update lastIndex by <code>Math.max(mountedIndex, lastIndex)</code> </p>
+<p> In the this example, when use index as key, and click<br>reverse , React pick the first element and found it’s key’s value equal to 0, and the lastIndex equal zero too. <code>mountedIndex &lt; lastIndex === false</code>, so React wouldn’t change the input element position. for the second element, it’s the same situation.(mountedIndex =1, and lastIndex = 0);</p>
+<p>for the third elemend, mountedIndex = 2, lastIndex = 1; // fasle and update lastIndex = 2</p>
+<p>for the fourth element, moutedIndex = 3, lastIndex = 2;<br>// false and update lastIndex = 3.</p>
+<hr>
+<p>Reference：</p>
+<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/20346379" target="_blank" rel="noopener">diff algorithm</a></li>
+<li><a href="https://juejin.im/post/5a31dda3f265da43052ea207" target="_blank" rel="noopener">index bug</a></li>
+</ul>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/5146554.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/qq/001faIUs4M2zna.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+</html>

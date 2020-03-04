@@ -1,0 +1,199 @@
+
+<!DOCTYPE html>
+<html lang="EN" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>wechat_alipay_app - Jelly&#39;s Blogs</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Jelly38214,"> 
+    <meta name="description" content="An Front End have GF ^_^,近来在开发支付宝小程序（大体和微信小程序差不多），踩了些坑，记录下来，方便复盘。
+
+整合阿里iconfont
+
+为了减小小程序的体积以及提高页面加载速度，对于一些小icon图片，一律使用iconfo,"> 
+    <meta name="author" content="Jelly"> 
+    <link rel="alternative" href="atom.xml" title="Jelly&#39;s Blogs" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-8691406134231910",
+              enable_page_level_ads: true
+         });
+    </script>
+    <script async custom-element="amp-auto-ads"
+        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+    </script>
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">Jelly&#39;s Blogs</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="icon-home image-icon" href="javascript:;" data-url="http://yoursite.com"></a>
+    <div title="播放/暂停" class="icon-play"></div>
+    <h3 class="subtitle">wechat_alipay_app</h3>
+    <div class="social">
+        <!--<div class="like-icon">-->
+            <!--<a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+        <!--</div>-->
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">wechat_alipay_app</h1>
+        <div class="stuff">
+            <span>六月 29, 2018</span>
+            
+  <ul class="post-tags-list" itemprop="keywords"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/%E5%B0%8F%E7%A8%8B%E5%BA%8F-iconfont-gulp/" rel="tag">小程序; iconfont; gulp;</a></li></ul>
+
+
+        </div>
+        <div class="content markdown">
+            <p>近来在开发支付宝小程序（大体和微信小程序差不多），踩了些坑，记录下来，方便复盘。</p>
+<blockquote>
+<p>整合阿里iconfont</p>
+</blockquote>
+<p>为了减小小程序的体积以及提高页面加载速度，对于一些小icon图片，一律使用iconfont。</p>
+<p>但如何按照常规的iconfont的使用方式，把iconfont下载放置到项目，在小程序中还是无法使用iconfont的。因为小程序中，<code>@font-face的src:url()</code>是不接受本地或是网上地址来载入资源的，它能接受的是<code>base64</code>化后的资源;</p>
+<p>经过一番搜索，网上大部分是这样的做法：</p>
+<pre><code>* 下载阿里iconfont，放置在项目中，然后把下载下来的文件里面的iconfont.ttf通过一个网站https://transfonter.org/，把它进行base64化，然后下载下来复制里面的内容粘贴到全局的css(app.acss/app.wcss)。最后，在把原来的下载好的iconfont资源里面的iconfont.css，除了@font-face这部分，剩余的部分全部copy到全局css文件。</code></pre><p>上述做法，步骤繁琐，手工活贼多，扩展性也不好，设计师改了一个图标，那就要重新重复上述操作。</p>
+<p>上述流程，其实也可以看做是工程流程的一部分，所以可以使用gulp来进行自动化构建完成这些繁琐的步骤。</p>
+<p>如下图，gulp文件的配置<br><img src="http://p150tzuds.bkt.clouddn.com//wechat_app/alipay_gulp.png" alt=""></p>
+<p>以及整个项目的结构<br><img src="http://p150tzuds.bkt.clouddn.com//wechat_app/alipay_project_root.png" alt=""></p>
+<p>以及专门放置iconfont的文件<br><img src="http://p150tzuds.bkt.clouddn.com//wechat_app/iconfont_resource.png" alt=""></p>
+<p>整个gulp的部分作用就是把iconfont.tff自动进行base64化，而不需要去网站上进行转化。其中，<code>app.css</code>是放置全局css的，通过gulp，会合并iconfont的文件，一起生产小程序专用的全局css文件– app.acss.(如果要生成微信小程序的，就改gulp文件，把生成文件的名字从app.acss变为app.wcss即可)</p>
+<p>参考：</p>
+<pre><code>* [文章1](https://www.jianshu.com/p/90da43965899)
+
+* [文章2](https://juejin.im/entry/5a54b73b6fb9a01ca7135335)</code></pre><blockquote>
+<p>gulp配置@import路径的根目录</p>
+</blockquote>
+<p>为了简洁地引入全局的less文件<code>index.less</code>, 避免使用相对路径;</p>
+<p>根据less官网的说明，可以给less配置<code>rootpath</code>来指明@import的根目录</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在gulpfile文件的less部分配置,具体内容查看上面的截图</span></span><br><span class="line">.pipe(less(&#123;</span><br><span class="line">    globalVars:&#123;</span><br><span class="line">        <span class="comment">// 配置全局less变量</span></span><br><span class="line">    &#125;,</span><br><span class="line">    rootpath:path.resolve(__dirname,<span class="string">'./'</span>)</span><br><span class="line">&#125;))</span><br></pre></td></tr></table></figure>
+
+<p>通过上述配置，在我的小程序引入根目录下的styles文件夹的index.less文件就可以这样写</p>
+<p><code>@import &quot;styles/index.less&quot;</code>,而不是这样写<code>@import &quot;../../styles/index.less&quot;</code></p>
+<p>参考：</p>
+<pre><code>* [文章1](https://www.v2ex.com/t/223292)
+
+* [官网](http://lesscss.org/usage/#using-less-in-the-browser-options)</code></pre>
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/5146554.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/qq/001faIUs4M2zna.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+</html>

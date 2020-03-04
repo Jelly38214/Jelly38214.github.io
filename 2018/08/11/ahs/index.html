@@ -1,0 +1,189 @@
+
+<!DOCTYPE html>
+<html lang="EN" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ahs - Jelly&#39;s Blogs</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Jelly38214,"> 
+    <meta name="description" content="An Front End have GF ^_^,本文记录在爱回收为提供工作效率或改善开发体验所做的一些工作；
+自定义React组件的在vscode下的智能提示
+ 要实现上述问题，首先得来解决vscode如何识别webpack配置好的路径别名。当你,"> 
+    <meta name="author" content="Jelly"> 
+    <link rel="alternative" href="atom.xml" title="Jelly&#39;s Blogs" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-8691406134231910",
+              enable_page_level_ads: true
+         });
+    </script>
+    <script async custom-element="amp-auto-ads"
+        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+    </script>
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">Jelly&#39;s Blogs</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="icon-home image-icon" href="javascript:;" data-url="http://yoursite.com"></a>
+    <div title="播放/暂停" class="icon-play"></div>
+    <h3 class="subtitle">ahs</h3>
+    <div class="social">
+        <!--<div class="like-icon">-->
+            <!--<a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+        <!--</div>-->
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">ahs</h1>
+        <div class="stuff">
+            <span>八月 11, 2018</span>
+            
+  <ul class="post-tags-list" itemprop="keywords"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/%E6%95%88%E7%8E%87%EF%BC%9B%E5%B7%A5%E5%85%B7%EF%BC%9B%E7%88%B1%E5%9B%9E%E6%94%B6%EF%BC%9B/" rel="tag">效率；工具；爱回收；</a></li></ul>
+
+
+        </div>
+        <div class="content markdown">
+            <h3 id="本文记录在爱回收为提供工作效率或改善开发体验所做的一些工作；"><a href="#本文记录在爱回收为提供工作效率或改善开发体验所做的一些工作；" class="headerlink" title="本文记录在爱回收为提供工作效率或改善开发体验所做的一些工作；"></a>本文记录在爱回收为提供工作效率或改善开发体验所做的一些工作；</h3><ol>
+<li><p>自定义React组件的在vscode下的智能提示</p>
+<p> 要实现上述问题，首先得来解决vscode如何识别<code>webpack</code>配置好的路径别名。当你在webpack.config.js里面的alias给你路径配置别名来帮助webpack去识别路径打包，这个别名指向的路径，vscode是不能识别。你得去做的努力来帮助vscode去识别。</p>
+<ol>
+<li><p>安装插件Path Intellisense</p>
+</li>
+<li><p>编写jsconfig.json,<a href="https://code.visualstudio.com/docs/languages/jsconfig" target="_blank" rel="noopener">详情点击查看官网</a>;</p>
+<p>我的jsconfig.json</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"compilerOptions"</span>: &#123;</span><br><span class="line">        <span class="attr">"target"</span>: <span class="string">"ES6"</span>,</span><br><span class="line">        <span class="attr">"jsx"</span>: <span class="string">"react"</span>,</span><br><span class="line">        <span class="attr">"experimentalDecorators"</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="attr">"baseUrl"</span>: <span class="string">"."</span>,</span><br><span class="line">        <span class="attr">"paths"</span>: &#123;</span><br><span class="line">            <span class="attr">"@"</span>: <span class="string">"./src"</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"exclude"</span>: [<span class="string">"node_modules"</span>, <span class="string">"dist"</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>完成上述步骤，当你在vscode敲”@/components/Icon”,它就能给你提示，这个路径是根目录下的src文件夹下的components文件夹下面的Icon文件夹下的index.js，就是<code>/src/components/Icon</code>这个完整的路径。</p>
+<p><code>注意</code>：这里有个点需要注意，有些人，可能使用了ts，也就是typescript，然后就会有个tsconfig.json，这时需要注意的是，貌似typescript.json的权限比jsconfig.json高，也就是说，vscode会忽略jsconfig.json里面的配置，只去读tsconfig.json。<br>这时也不慌，只要把上述的jsconfig.js文件的compilerOptions直接复制到tsconfig.js就好啦</p>
+<p>完成上述步骤，就完成了vscode对别名路径的提示啦，但，react的智能提示还没完成。你此时，需要写注释啦。</p>
+<p>举个栗子</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * arguments xxx</span></span><br><span class="line"><span class="comment"> * example xxx</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Demo</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>然后你在引入这个组件，并在键入这个组件名的过程，就能给你提示，<code>arguments</code>, <code>example</code>，这两个提示啦。所以，你，或使用这个组件的人，就大概能知道，这个组件怎么使用，长啥样子。注释写得好，提示就更贴心，方便你我他。</p>
+</li>
+</ol>
+</li>
+</ol>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/5146554.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/qq/001faIUs4M2zna.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+</html>
